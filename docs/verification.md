@@ -1,5 +1,7 @@
 # Verification record
 
+Latest results: [rigorous assessment audit](assessment-audit.md), including 177 passing tests, four browser viewports, printed edge cases and repaired input/provider failures. The sections below preserve the earlier phase and recovery history.
+
 ## Original phase record (before GitHub publication)
 
 | Phase                      | Delivered                                                                                       | Evidence                                                                      | Remaining gate                                      |
@@ -60,7 +62,7 @@ Public URL: [https://spotter-trip-planner-indol.vercel.app/](https://spotter-tri
 - The existing Vercel project is now connected to the private GitHub repository, confirmed after recovery on 14 September 2026. Deployment history and source commit metadata identify which push is live.
 - The repository remains private. Reviewer access must be arranged before sharing the source link as a final submission.
 - The author still needs to review the architecture and record the required 3–5 minute Loom. Assessment submission has not been sent.
-- The mobile check used Chromium at 390 × 844, not a physical phone. PDF review covered the two-day route fixture used by the browser suite.
+- The expanded audit uses Chromium at four emulated sizes (320, 390, 768 and 1440 pixels), not physical devices. PDF review now includes multi-day, year-end restart, leap-day midnight and long metadata cases.
 
 ## Recovery verification — 14 September 2026
 

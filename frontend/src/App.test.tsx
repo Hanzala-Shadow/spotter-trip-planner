@@ -30,6 +30,7 @@ describe('Trip workflow', () => {
   it('sends the exact Django request contract and renders computed results', async () => {
     await generate();
     expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('button', { name: 'Print logs' })).toBeEnabled();
     const [url, options] = fetchMock.mock.calls[0];
     expect(url).toBe('/api/plan');
     expect(JSON.parse(options.body)).toEqual(requestFixture);
@@ -61,6 +62,7 @@ describe('Trip workflow', () => {
     expect(screen.getByText(/Inputs changed/)).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Chicago to Nashville' })).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('button', { name: 'Print logs' })).toBeDisabled();
   });
   it('rejects invalid hours before contacting the server', () => {
     render(<App />);
@@ -101,5 +103,29 @@ describe('Trip workflow', () => {
     expect(screen.getByRole('dialog')).toHaveTextContent('70 hours in 8 days');
     fireEvent.click(screen.getByRole('button', { name: 'Got it' }));
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  });
+  it('replaces a non-JSON server error with a useful retry message', async () => {
+    fetchMock.mockResolvedValueOnce({
+      ok: false,
+      json: async () => {
+        throw new SyntaxError('Unexpected token <');
+      },
+    });
+    render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: 'Generate trip plan' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      'The trip service returned an unreadable response. Please try again.',
+    );
+    expect(screen.getByRole('button', { name: 'Generate trip plan' })).toBeEnabled();
+  });
+  it('keeps generated driver details until the edited form is regenerated', async () => {
+    await generate();
+    fireEvent.click(screen.getByRole('button', { name: /Driver & vehicle details/ }));
+    fireEvent.change(screen.getByLabelText('Driver name'), { target: { value: 'Test Driver' } });
+    expect(screen.getByRole('button', { name: 'Print logs' })).toBeDisabled();
+    expect(document.querySelector('.print-logs')).toHaveTextContent(
+      'inputs changed after this plan was generated',
+    );
+    expect(document.querySelector('.print-logs')).not.toHaveTextContent('Test Driver');
   });
 });

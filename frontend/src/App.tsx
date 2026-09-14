@@ -154,7 +154,9 @@ export default function App() {
         }),
         signal: AbortSignal.timeout(55000),
       });
-      const data = await response.json();
+      const data = await response.json().catch(() => {
+        throw new Error('The trip service returned an unreadable response. Please try again.');
+      });
       if (!response.ok) throw new Error(data.error || 'The trip could not be planned.');
       setPlan(data);
       setDirty(false);
@@ -392,6 +394,7 @@ export default function App() {
                 <Button
                   variant="outlined"
                   startIcon={<Printer size={16} />}
+                  disabled={dirty || loading}
                   onClick={() => window.print()}
                 >
                   Print logs
@@ -627,6 +630,12 @@ export default function App() {
       </div>
       {plan && (
         <div className="print-logs">
+          {dirty && (
+            <p className="print-stale-notice">
+              These sheets are out of date: the inputs changed after this plan was generated.
+              Generate a new plan before using updated details.
+            </p>
+          )}
           {plan.logs.map((log) => (
             <LogSheet key={log.date} log={log} {...logProps!} />
           ))}

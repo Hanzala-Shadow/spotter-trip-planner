@@ -1,0 +1,15 @@
+.venv/
+node_modules/
+frontend/dist/
+__pycache__/
+.pytest_cache/
+.hypothesis/
+*.pyc
+.env
+.env.*
+!.env.example
+.vercel/
+test-results/
+playwright-report/
+*.sqlite3
+docs/qa/

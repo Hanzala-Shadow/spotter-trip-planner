@@ -6,7 +6,7 @@ The application is deployed at [https://spotter-trip-planner-indol.vercel.app/](
 
 The private source repository is [Hanzala-Shadow/spotter-trip-planner](https://github.com/Hanzala-Shadow/spotter-trip-planner). Source publication uses small sequential commits with remote branch and blob-hash verification after each push. The original five local phase commits remain in the review package's Git bundle. Large employer reference attachments stay in that package and are not required to build or run the source.
 
-The existing Vercel project was deployed directly and has no Git repository link. Publishing code to GitHub does not redeploy production. Connecting the existing project to this repository remains a separate deployment setup step.
+The existing Vercel project is connected to `Hanzala-Shadow/spotter-trip-planner` through the GitHub integration, confirmed on 14 September 2026. The original deployment was a direct upload. Future pushes use the connected Git deployment workflow; check the deployment source commit and READY state before treating a push as live.
 Project: `prj_eDvzP2dSaugKfzAPKwBK2C670sSc`. Deployment: `dpl_6r1VYFq9yi9mqmci5qv7io89GyDm`. Source application commit: `ada11ca`. State: READY. Vercel created the first deployment as production; its shorter production alias is public, while the team preview alias requires Vercel sign-in.
 
 For current source, clone the GitHub repository. To inspect the original phase history separately, clone the enclosed Git bundle into a different folder:
@@ -46,7 +46,7 @@ Vercel's [file-based Python documentation](https://vercel.com/docs/functions/run
 
 ## Release checklist
 
-Desktop and core hosted checks have passed. Source publication is complete. GitHub Actions passed all 77 tests, including the desktop/mobile browser suite. Its screenshots and two-page PDFs were inspected. Connecting Vercel to GitHub, arranging reviewer access, Loom recording and submission remain open.
+Desktop and core hosted checks have passed. Source publication is complete. GitHub Actions passed all 77 tests, including the desktop/mobile browser suite. Its screenshots and two-page PDFs were inspected. The Vercel GitHub connection is confirmed. Arranging reviewer access, Loom recording and submission remain open.
 
 1. Confirm the deployed homepage loads its JS/CSS and `/api/health` returns Django status.
 2. Generate the three supplied samples using live providers. Check route lines, markers, directions, cycle restart and fuel stop placement.

@@ -57,7 +57,7 @@ Public URL: [https://spotter-trip-planner-indol.vercel.app/](https://spotter-tri
 
 ## Remaining delivery steps
 
-- The existing Vercel project has no Git repository link. Its direct production deployment is healthy; GitHub pushes do not automatically redeploy it.
+- The existing Vercel project is now connected to the private GitHub repository, confirmed after recovery on 14 September 2026. Deployment history and source commit metadata identify which push is live.
 - The repository remains private. Reviewer access must be arranged before sharing the source link as a final submission.
 - The author still needs to review the architecture and record the required 3–5 minute Loom. Assessment submission has not been sent.
 - The mobile check used Chromium at 390 × 844, not a physical phone. PDF review covered the two-day route fixture used by the browser suite.
@@ -66,7 +66,7 @@ Public URL: [https://spotter-trip-planner-indol.vercel.app/](https://spotter-tri
 
 - Recovered source from the saved review package and compared it with GitHub: the remote initially contained only `.gitignore`.
 - Reran the locked dependency installation, 56 backend tests, 15 frontend tests, TypeScript/Vite production build, Django system check and generated-fixture consistency check. All passed.
-- Vercel deployment `dpl_6r1VYFq9yi9mqmci5qv7io89GyDm` remains READY. The Django health endpoint returned HTTP 200. The Vercel project has no Git link.
+- Vercel deployment `dpl_6r1VYFq9yi9mqmci5qv7io89GyDm` remains READY. The Django health endpoint returned HTTP 200. At that recovery check the Vercel project had no Git link; the user connected it afterward.
 - Repeated the live Los Angeles → Phoenix → Dallas trip: 1,438 miles, one fuel stop, two daily rests and three log sheets. The itinerary fuel button opened the matching Leaflet popup.
 - Source uploads exclude the original PDF, PNG and DOCX reference attachments; those bytes are retained in the review package. All runtime source, tests, dependency locks, configuration and technical documentation are included.
 

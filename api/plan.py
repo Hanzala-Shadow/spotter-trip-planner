@@ -1,4 +1,5 @@
 """Vercel /api/plan adapter for the shared Django application."""
+
 from pathlib import Path
 import sys
 

@@ -1,8 +1,12 @@
 import os
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "local-stateless-planner-development-only")
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY", "local-stateless-planner-development-only"
+)
 DEBUG = os.environ.get("DJANGO_DEBUG", "false").lower() == "true"
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,.vercel.app").split(",")
+ALLOWED_HOSTS = os.environ.get(
+    "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,.vercel.app"
+).split(",")
 ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
 INSTALLED_APPS = ["planner"]

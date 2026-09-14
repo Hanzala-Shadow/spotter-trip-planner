@@ -9,14 +9,18 @@ from .schedule import make_schedule, daily_logs
 
 @require_GET
 def health(request):
-    return JsonResponse({"status": "ok", "service": "trip-planner", "backend": "Django"})
+    return JsonResponse(
+        {"status": "ok", "service": "trip-planner", "backend": "Django"}
+    )
 
 
 @require_GET
 def locations(request):
     query = request.GET.get("q", "").strip()
     if not 2 <= len(query) <= 150:
-        return JsonResponse({"error": "Enter a location between 2 and 150 characters."}, status=400)
+        return JsonResponse(
+            {"error": "Enter a location between 2 and 150 characters."}, status=400
+        )
     try:
         return JsonResponse({"places": providers.search_places(query)})
     except providers.ProviderError as exc:
@@ -26,18 +30,32 @@ def locations(request):
 @require_POST
 def plan(request):
     if request.content_type != "application/json":
-        return JsonResponse({"error": "Use application/json for trip details."}, status=415)
+        return JsonResponse(
+            {"error": "Use application/json for trip details."}, status=415
+        )
     try:
         places, departure, cycle, details = validate_trip(json.loads(request.body))
         legs = providers.fetch_route(places)
         result = make_schedule(legs, departure, cycle)
         providers.enrich_stop_labels(result["events"])
         result["logs"] = daily_logs(result["events"], departure)
-        result["route"] = {"legs": [{"start": leg.start.json(), "end": leg.end.json(), "miles": leg.miles,
-                                     "seconds": leg.seconds, "coordinates": leg.coordinates, "directions": leg.directions} for leg in legs],
-                           "provider": "OSRM / OpenStreetMap", "truck_restrictions_checked": False}
+        result["route"] = {
+            "legs": [
+                {
+                    "start": leg.start.json(),
+                    "end": leg.end.json(),
+                    "miles": leg.miles,
+                    "seconds": leg.seconds,
+                    "coordinates": leg.coordinates,
+                    "directions": leg.directions,
+                }
+                for leg in legs
+            ],
+            "provider": "OSRM / OpenStreetMap",
+            "truck_restrictions_checked": False,
+        }
         result["driver_details"] = details
-        result["utc_offset_minutes"] = int(departure.utcoffset().total_seconds()/60)
+        result["utc_offset_minutes"] = int(departure.utcoffset().total_seconds() / 60)
         result["assumptions"] = [
             "Property-carrying driver: 70 hours in 8 days, no adverse conditions; 11-hour driving limit and 14-hour window.",
             "A 30-minute non-driving interruption follows eight cumulative driving hours. Fuel before exceeding 1,000 miles.",
@@ -53,7 +71,14 @@ def plan(request):
         response["Cache-Control"] = "no-store"
         return response
     except (ValueError, json.JSONDecodeError, UnicodeDecodeError) as exc:
-        return JsonResponse({"error": str(exc) if not isinstance(exc, json.JSONDecodeError) else "Invalid JSON trip details."}, status=400)
+        return JsonResponse(
+            {
+                "error": str(exc)
+                if not isinstance(exc, json.JSONDecodeError)
+                else "Invalid JSON trip details."
+            },
+            status=400,
+        )
     except RequestDataTooBig:
         return JsonResponse({"error": "Trip details are too large."}, status=413)
     except providers.ProviderError as exc:

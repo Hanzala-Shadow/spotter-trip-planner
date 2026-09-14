@@ -1,0 +1,9 @@
+.venv
+.git
+docs
+backend/planner/tests
+e2e
+test-results
+playwright-report
+.pytest_cache
+.hypothesis

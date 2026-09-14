@@ -1,0 +1,7 @@
+node_modules
+frontend/dist
+.venv
+docs/references
+docs/qa
+frontend/src/__fixtures__
+package-lock.json

@@ -13,3 +13,8 @@ test-results/
 playwright-report/
 *.sqlite3
 docs/qa/
+docs/references/*.pdf
+docs/references/*.png
+docs/references/*.docx
+*.git.bundle
+spotter-trip-planner-review.zip

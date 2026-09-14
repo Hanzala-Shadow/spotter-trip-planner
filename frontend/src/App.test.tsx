@@ -6,7 +6,7 @@ import App from './App';
 import requestFixture from './__fixtures__/request.json';
 import planFixture from './__fixtures__/plan.json';
 
-// Map behavior belongs to browser checks; keep form and log tests deterministic.
+// Leaflet interactions are covered by the browser suite.
 vi.mock('./MapPanel', () => ({ default: () => <div aria-label="Trip route map" /> }));
 const fetchMock = vi.fn();
 beforeEach(() => {

@@ -17,16 +17,12 @@ import {
 } from '@mui/material';
 import {
   ArrowRight,
-  Check,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Clock3,
   Coffee,
   FileText,
   Fuel,
-  Info,
-  MapPin,
   Moon,
   PackageCheck,
   Printer,
@@ -81,38 +77,35 @@ function tomorrow() {
   d.setDate(d.getDate() + 1);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T06:00`;
 }
+const eventIcons = {
+  drive: Truck,
+  fuel: Fuel,
+  daily_rest: Moon,
+  cycle_restart: RotateCcw,
+  break: Coffee,
+};
+
 function EventIcon({ kind }: { kind: string }) {
-  const Icon =
-    kind === 'drive'
-      ? Truck
-      : kind === 'fuel'
-        ? Fuel
-        : kind === 'daily_rest'
-          ? Moon
-          : kind === 'cycle_restart'
-            ? RotateCcw
-            : kind === 'break'
-              ? Coffee
-              : PackageCheck;
+  const Icon = eventIcons[kind as keyof typeof eventIcons] || PackageCheck;
   return <Icon size={18} />;
 }
 
 export default function App() {
-  const [current, setCurrent] = useState<Place | null>(chicago),
-    [pickup, setPickup] = useState<Place | null>(springfield),
-    [dropoff, setDropoff] = useState<Place | null>(nashville);
-  const [cycle, setCycle] = useState('0'),
-    [departure, setDeparture] = useState(tomorrow),
-    [offset, setOffset] = useState(-360),
-    [details, setDetails] = useState<DriverDetails>(blankDetails);
-  const [plan, setPlan] = useState<Plan | null>(null),
-    [loading, setLoading] = useState(false),
-    [error, setError] = useState(''),
-    [dirty, setDirty] = useState(false);
-  const [tab, setTab] = useState(0),
-    [day, setDay] = useState(0),
-    [selected, setSelected] = useState<number | null>(null),
-    [showAssumptions, setShowAssumptions] = useState(false);
+  const [current, setCurrent] = useState<Place | null>(chicago);
+  const [pickup, setPickup] = useState<Place | null>(springfield);
+  const [dropoff, setDropoff] = useState<Place | null>(nashville);
+  const [cycle, setCycle] = useState('0');
+  const [departure, setDeparture] = useState(tomorrow);
+  const [offset, setOffset] = useState(-360);
+  const [details, setDetails] = useState<DriverDetails>(blankDetails);
+  const [plan, setPlan] = useState<Plan | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [dirty, setDirty] = useState(false);
+  const [tab, setTab] = useState(0);
+  const [day, setDay] = useState(0);
+  const [selected, setSelected] = useState<number | null>(null);
+  const [showAssumptions, setShowAssumptions] = useState(false);
   const selectEvent = useCallback((id: number) => setSelected(id), []);
   function changed() {
     setDirty(true);
@@ -201,7 +194,7 @@ export default function App() {
           <aside className="planner-sidebar">
             <div className="section-heading">
               <span className="eyebrow">PLAN YOUR ROUTE</span>
-              <h1>A clear road ahead.</h1>
+              <h1>Plan a truck trip</h1>
               <p>Build your trip and the daily logs that go with it.</p>
             </div>
             <form onSubmit={generate} noValidate>
@@ -227,7 +220,6 @@ export default function App() {
               </div>
               <div className="form-divider" />
               <div className="field-heading">
-                <Clock3 size={17} />
                 <h2>Hours & departure</h2>
               </div>
               <TextField
@@ -294,7 +286,6 @@ export default function App() {
               </TextField>
               <Accordion className="driver-accordion" elevation={0} disableGutters>
                 <AccordionSummary expandIcon={<ChevronDown size={16} />}>
-                  <FileText size={16} />
                   <span>Driver & vehicle details</span>
                   <small>Optional</small>
                 </AccordionSummary>
@@ -367,11 +358,9 @@ export default function App() {
               </div>
             </div>
             <button className="assumptions-link" onClick={() => setShowAssumptions(true)}>
-              <Info size={15} />
               Planning rules & assumptions
             </button>
             <div className="sidebar-note">
-              <Check size={15} />
               <span>No account needed. Your trip is not saved.</span>
             </div>
           </aside>
@@ -409,7 +398,6 @@ export default function App() {
             <div className="stats-grid">
               <div>
                 <span>
-                  <Route size={15} />
                   Total distance
                 </span>
                 <strong>
@@ -420,7 +408,6 @@ export default function App() {
               </div>
               <div>
                 <span>
-                  <Truck size={15} />
                   Driving time
                 </span>
                 <strong>{plan ? duration(plan.summary.driving_seconds) : '—'}</strong>
@@ -428,7 +415,6 @@ export default function App() {
               </div>
               <div>
                 <span>
-                  <Clock3 size={15} />
                   Trip duration
                 </span>
                 <strong>{plan ? duration(plan.summary.elapsed_seconds) : '—'}</strong>
@@ -440,7 +426,6 @@ export default function App() {
               </div>
               <div>
                 <span>
-                  <PackageCheck size={15} />
                   Delivery completed
                 </span>
                 <strong>{plan ? time(plan.summary.arrival) : '—'}</strong>
@@ -464,15 +449,12 @@ export default function App() {
               <>
                 <div className="trip-summary">
                   <span>
-                    <Fuel size={16} />
                     {plan.summary.fuel_stops} fuel stops
                   </span>
                   <span>
-                    <Moon size={16} />
                     {plan.summary.daily_rests} daily rests
                   </span>
                   <span>
-                    <RotateCcw size={16} />
                     {plan.summary.cycle_restarts} cycle restarts
                   </span>
                   <span>
@@ -499,7 +481,7 @@ export default function App() {
                     {tab === 0 && (
                       <div className="itinerary">
                         <div className="panel-intro">
-                          <h3>One step at a time</h3>
+                          <h3>Trip itinerary</h3>
                           <span>All times {offsetLabel(plan.utc_offset_minutes)}</span>
                         </div>
                         {plan.events.map((event, i) => (
@@ -583,7 +565,6 @@ export default function App() {
                         {plan.route.legs.map((leg, i) => (
                           <div key={i}>
                             <h3>
-                              <MapPin size={17} />
                               {i === 0 ? 'To pickup' : 'To dropoff'}{' '}
                               <span>{leg.miles.toFixed(1)} mi</span>
                             </h3>
@@ -620,7 +601,7 @@ export default function App() {
               </div>
             )}
             <footer className="results-footer">
-              <span>Built for the full journey.</span>
+              <span>Trip planning worksheet</span>
               <button onClick={() => setShowAssumptions(true)}>
                 Review planning assumptions <ArrowRight size={13} />
               </button>

@@ -1,8 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  // Offline suite: actual Leaflet geometry + Django, declared road fixtures,
-  // no public tile downloads. Live basemap appearance is a separate QA gate.
+  // Keep the offline suite independent of public tile availability.
   await page.route('https://tile.openstreetmap.org/**', (route) => route.abort());
   await page.goto('/');
 });

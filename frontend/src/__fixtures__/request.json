@@ -1,0 +1,27 @@
+{
+  "current": {
+    "label": "Chicago, Illinois",
+    "lat": 41.8781,
+    "lon": -87.6298
+  },
+  "pickup": {
+    "label": "Springfield, Illinois",
+    "lat": 39.7817,
+    "lon": -89.6501
+  },
+  "dropoff": {
+    "label": "Nashville, Tennessee",
+    "lat": 36.1627,
+    "lon": -86.7816
+  },
+  "cycle_used": 0,
+  "departure": "2026-09-15T06:00",
+  "utc_offset_minutes": -360,
+  "driver_details": {
+    "driver": "",
+    "carrier": "",
+    "vehicle": "",
+    "shipping": "",
+    "office": ""
+  }
+}

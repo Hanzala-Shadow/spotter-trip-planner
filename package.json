@@ -9,7 +9,10 @@
     "preview": "vite preview --config frontend/vite.config.ts --host 127.0.0.1",
     "test": "vitest run --config frontend/vite.config.ts",
     "test:e2e": "playwright test",
-    "format": "prettier --write frontend/src frontend/vite.config.ts docs/*.md README.md vercel.json"
+    "format": "prettier --write frontend/src frontend/vite.config.ts docs/*.md README.md vercel.json",
+    "demo:preflight": "node scripts/demo_preflight.mjs",
+    "format:python": "ruff format backend api scripts",
+    "lint:python": "ruff check backend api scripts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

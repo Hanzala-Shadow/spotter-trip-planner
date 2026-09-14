@@ -18,3 +18,4 @@ docs/references/*.png
 docs/references/*.docx
 *.git.bundle
 spotter-trip-planner-review.zip
+.ruff_cache/

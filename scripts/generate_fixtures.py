@@ -26,6 +26,9 @@ TRIP = {
 
 
 def fixture_route(places):
+    if all((p.lon,p.lat)==(places[0].lon,places[0].lat) for p in places):
+        return [Leg(places[i],places[i+1],0,0,[[places[i].lon,places[i].lat]]*2)
+                for i in range(2)]
     return [Leg(places[i],places[i+1],hours*55,hours*3600,
                 [[places[i].lon,places[i].lat],[places[i+1].lon,places[i+1].lat]],
                 [{'instruction':f'Drive to {places[i+1].label}','miles':hours*55}])

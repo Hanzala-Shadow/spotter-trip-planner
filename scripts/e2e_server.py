@@ -3,9 +3,16 @@ from unittest.mock import patch
 from wsgiref.simple_server import make_server
 from serve_preview import preview_app
 from generate_fixtures import fixture_route
+from planner.providers import ProviderError
 
 
 def fixture_search(query):
+    if query == 'No results':
+        return []
+    if query == 'Unavailable':
+        raise ProviderError('Location search is unavailable. Please try again.')
+    if query == 'Chicago':
+        return [{'label':'Chicago, Illinois','lat':41.8781,'lon':-87.6298}]
     return [{'label':'Denver, Colorado','lat':39.7392,'lon':-104.9903}]
 
 

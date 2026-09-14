@@ -21,6 +21,24 @@ export default defineConfig({
         hasTouch: true,
       },
     },
+    {
+      name: 'compact',
+      use: {
+        browserName: 'chromium',
+        viewport: { width: 320, height: 740 },
+        isMobile: true,
+        hasTouch: true,
+      },
+    },
+    {
+      name: 'tablet',
+      use: {
+        browserName: 'chromium',
+        viewport: { width: 768, height: 1024 },
+        isMobile: true,
+        hasTouch: true,
+      },
+    },
   ],
   webServer: {
     command: 'npm run build && python scripts/e2e_server.py',

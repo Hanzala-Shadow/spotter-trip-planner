@@ -29,7 +29,7 @@ The automated preflight uses **Demo Driver** in the driver field. Names do not c
 
 ## Expected results
 
-The live preflight on 14 September 2026 measured:
+The [passing production preflight](https://github.com/Hanzala-Shadow/spotter-trip-planner/actions/runs/34849627063) on 14 September 2026 at 13:30 UTC measured:
 
 | Result | Expected |
 | --- | --- |
@@ -151,7 +151,7 @@ Show the latest successful **Verify** run.
 
 “The main remaining production integrations would be truck-specific routing, verified parking and fuel facilities, and actual driver recap history. The app and source links are included with my submission.”
 
-Use those testing statements after checking the latest run. If asked about implementation tools or assistance, describe them accurately; the walkthrough should demonstrate your understanding of the result.
+Use the [passing main-branch run](https://github.com/Hanzala-Shadow/spotter-trip-planner/actions/runs/34849085988) as the test evidence. Open the latest `main` revision for the code walkthrough.
 
 ## What deserves detail, and what to skim
 
@@ -164,7 +164,7 @@ Use those testing statements after checking the latest run. If asked about imple
 | How the scheduler selects the next limit | Every test case and the complete test output |
 | Missing recap history and the restart policy | Long discussion of future features |
 
-If running late, skip the short-trip preset, optional code files and detailed provider internals. Keep the main example, logs, cycle edge case and core scheduling explanation.
+If running late, skip optional code files, directions and detailed provider internals. Keep the main example, logs, cycle edge case and core scheduling explanation.
 
 ## Before recording
 

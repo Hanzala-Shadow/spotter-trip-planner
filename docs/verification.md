@@ -2,9 +2,11 @@
 
 ## Automated suite
 
-The latest full assessment audit passed **177 named tests**: 123 Python tests, 18 React component tests and 36 browser cases. Two backend tests additionally exercise 1,620 generated schedules inside that count.
+The cleaned application passed **177 named tests**: 123 Python tests, 18 React component tests and 36 browser cases. Two backend tests additionally exercise 1,620 generated schedules inside that count.
 
-[Verified audit run](https://github.com/Hanzala-Shadow/spotter-trip-planner/actions/runs/34835111999)
+[Passing main-branch verification](https://github.com/Hanzala-Shadow/spotter-trip-planner/actions/runs/34849085988), application commit `1fae068478a2a6341ea92a4d7c06d1c4aa440096`.
+
+Python formatting and unused-code checks, TypeScript checks, the production build and Django system checks also passed.
 
 | Area | Coverage |
 | --- | --- |
@@ -26,7 +28,9 @@ The earlier print review covered 16 PDFs and 40 total US Letter pages. All ten d
 
 ## Live recording preflight
 
-[Successful recording preflight](https://github.com/Hanzala-Shadow/spotter-trip-planner/actions/runs/34847944239), 14 September 2026, 13:14 UTC.
+[Successful recording preflight](https://github.com/Hanzala-Shadow/spotter-trip-planner/actions/runs/34849627063), 14 September 2026, 13:30 UTC.
+
+Vercel deployment `dpl_B2agnKaKknWCjnXyJU2UV9UUKy2X` was READY at the application commit above, and the public HTML referenced the same JavaScript and CSS assets as the tested build before this check started. Subsequent evidence-document updates do not change application code.
 
 This check used the public Vercel application with real Photon/OSRM/OpenStreetMap services. It verified health, route generation, loaded map tiles, route paths, the fuel popup, directions, all log dates, printing, a 390-pixel layout, stale-print protection and absence of uncaught page errors.
 
@@ -37,7 +41,7 @@ Fixed departure: 15 September 2026 at 06:00, terminal UTC−06:00.
 | Multi-day | 20 h | 1,438.1 | 26:08:53 | 48:38:53 | 3 | 1 / 2 / 0 |
 | Cycle restart | 68 h | 714.8 | 13:30:29 | 59:30:29 | 3 | 0 / 1 / 1 |
 
-Measured generation times were 5.556 and 3.239 seconds for this run; these are observations, not latency guarantees. Public routing estimates and optional nearby labels can change. The script records the current values in its JSON report.
+Measured generation times were 7.249 and 4.327 seconds for this run; these are observations, not latency guarantees. Public routing estimates and optional nearby labels can change. The script records the current values in its JSON report. Some optional nearby place names used the documented coordinate fallback in this run; route generation, markers and scheduling remained available.
 
 Run `npm run demo:preflight` or the **Demo preflight** workflow before recording. Its report, route screenshot, mobile screenshot and three-day PDF are attached to the run for seven days.
 

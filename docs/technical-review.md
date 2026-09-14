@@ -1,5 +1,31 @@
 # Loom walkthrough and submission preparation
 
+## Set up Loom for your first recording
+
+Use the Chrome extension and keep the app, GitHub code and test results in one Chrome window. If you prefer a local editor and want the camera bubble to follow you between applications, use the desktop app on Windows or macOS. Loom's desktop app does not support Linux; on Ubuntu, use the Chrome extension. [Recording platforms](https://support.atlassian.com/loom/docs/the-loom-recording-platforms/)
+
+1. Open [Loom](https://www.loom.com/) and sign up or sign in. The Starter plan permits five minutes per recording, which covers the required 3–5 minute assessment video. Aim to stop around 4:30–4:45. [Recording limits](https://support.atlassian.com/loom/docs/how-long-can-i-record/)
+2. Follow [Install the Chrome Extension](https://support.atlassian.com/loom/docs/install-the-chrome-extension/). Add it from the official store, allow microphone access and camera access if using a webcam, then pin Loom using Chrome's Extensions menu.
+3. Prepare the tabs below. Maximize Chrome, close unrelated tabs, silence notifications and keep these notes on your phone or on paper. Increase code zoom until it is readable in a short playback test. A small camera bubble is optional; place it where it does not cover the fields, map or log totals.
+4. Open the Loom extension. Select **Full Screen** and turn the **microphone on**. Choose your actual microphone and confirm the audio indicator responds as you speak. Set the camera on or off as preferred. Use the highest recording quality offered by your account; keep system/tab audio off for this narrated demonstration. [Recorder controls](https://support.atlassian.com/loom/docs/get-started-with-the-loom-chrome-extension/)
+5. Select **Start Recording**. In Chrome's sharing dialog choose the screen containing the prepared window and select **Share**. Full-screen capture keeps tab changes, a local editor and print preview in the recording. If sharing one tab, switching tabs will not automatically change the captured source.
+6. First make a disposable 20–30 second test. Say a sentence, switch to the code tab, open and cancel print preview, then use Loom's **Stop** button. Play it back to check your microphone, text size and captured screen. The extension camera bubble can disappear over PDFs or other applications; that does not mean screen capture stopped.
+7. Rehearse the script below with the actual clicks. Generate both presets once, then return to Multi-day, set the exact date/offset and fill optional details. For the final take, speak naturally and allow results to load before describing them. Leave the timer/control menu available until you are comfortable stopping.
+8. Stop before five minutes. Wait until the video page has loaded and the whole recording plays. Rename it **Hanzala Ahsan | Spotter Assessment | React + Django Trip Planner**. Review the audio, code readability and total duration. Use **Share → Link settings → Anyone with the link**, then **Copy link**, and test the link in a signed-out or incognito window. [Sharing options](https://support.atlassian.com/loom/docs/share-your-recording/)
+
+### Tabs to open before starting
+
+| Tab | Open at |
+| --- | --- |
+| [Application](https://spotter-trip-planner-indol.vercel.app/) | Multi-day inputs, before generating |
+| [Django view](https://github.com/Hanzala-Shadow/spotter-trip-planner/blob/main/backend/planner/views.py) | Search within the file for `def plan` |
+| [Scheduler](https://github.com/Hanzala-Shadow/spotter-trip-planner/blob/main/backend/planner/schedule.py) | `while elapsed < leg.seconds` and `seconds = min(` |
+| [Daily logs](https://github.com/Hanzala-Shadow/spotter-trip-planner/blob/main/backend/planner/schedule.py) | A second tab at `def daily_logs` |
+| [Passing verification](https://github.com/Hanzala-Shadow/spotter-trip-planner/actions/runs/34849085988) | Completed Verify run |
+| [Live preflight](https://github.com/Hanzala-Shadow/spotter-trip-planner/actions/runs/34849627063) | Optional evidence tab |
+
+Keep the repository signed in on your recording computer. Use the latest `main`; do not show an older local checkout.
+
 ## Recording example
 
 Use the **Multi-day** preset at [the public application](https://spotter-trip-planner-indol.vercel.app/). It demonstrates the map, both route legs, fuel, rest and multiple daily sheets in one example.
@@ -70,88 +96,63 @@ The 12:30 sleeper total on Sep 16 contains the end of the first rest and the sta
 
 These are measured provider results, not hard-coded answers. Minor route distances, estimates or nearby labels may change; the scheduling rules and one-hour service requirements still apply.
 
-## A 4 minute 45 second walkthrough
+## Complete walkthrough script
 
-Use this as speaking notes. Rehearse the actions once and explain them in your own words.
+Target: **4:30–4:45**, within the required 3–5 minutes. The spoken text is about 480 words. Read only the quoted paragraphs; the action notes tell you what to show. Timings are rehearsal targets, not a requirement to rush. At a slower pace, omit optional directions and keep the code explanation concise.
 
-| Time | Show | Explain |
-| --- | --- | --- |
-| 0:00–0:20 | Public app | Purpose and stack |
-| 0:20–0:45 | Multi-day preset and input fields | Required inputs, departure and terminal clock |
-| 0:45–1:15 | Generate and summary cards | Driving versus total elapsed time |
-| 1:15–1:55 | Route, fuel popup and itinerary | Two route legs, fuel and overnight rests |
-| 1:55–2:40 | Daily logs and date navigation | Four statuses, midnight splitting, 24-hour totals and remarks |
-| 2:40–2:55 | Print preview | All three dates appear, including unselected dates |
-| 2:55–3:25 | Cycle restart preset | Two hours available, then a 34-hour restart |
-| 3:25–4:20 | Django view and scheduling loop | Request flow, limiting clocks and shared event list |
-| 4:20–4:45 | Passing CI and brief limitations | Test evidence and scope |
+### 0:00–0:20: Introduction
 
-### 0:00–0:45: purpose and inputs
+**Show:** Show the application with the Multi-day preset selected and the required inputs visible.
 
-“Hi, I’m Hanzala. This is Waypoint, my React and Django implementation of the truck trip-planning assessment. It takes the current location, pickup, dropoff and used cycle hours, then produces a route, scheduled stops and filled daily logs.
+> Hi, I’m Hanzala Ahsan. This is Waypoint, my React and Django implementation of the truck trip-planning assessment. It takes the current location, pickup, dropoff and used cycle hours, then produces a route, scheduled stops and daily duty logs.
 
-“I’ll use Los Angeles to Dallas through Phoenix, starting with 20 cycle hours used. I’ve also supplied the departure time and a fixed terminal offset so every log has a consistent date and clock.”
+### 0:20–0:45: Inputs
 
-Point to the fields. Do not spend time typing every optional detail during the recording.
+**Show:** Point to the three locations, 20 cycle hours, September 15 at 06:00 and UTC−06:00. Optional driver details should already be filled.
 
-### 0:45–1:55: generation, map and stops
+> For this example, the driver starts in Los Angeles, picks up in Phoenix and delivers in Dallas, with twenty cycle hours already used. I’ve set departure to September fifteenth at six in the morning. Every sheet uses the selected home-terminal offset, so the clock stays consistent across the route.
 
-Click **Generate trip plan**.
+### 0:45–1:15: Generate and summarize
 
-“The route is about 1,438 miles. Driving takes about 26 hours, while the complete trip takes about 48 hours because that includes pickup, delivery, fuel and rest.
+**Show:** Click Generate trip plan. Let the result load before reading its numbers. Point to distance, driving time and total duration.
 
-“The map separates the route to pickup from the route to dropoff. Stops are linked to the itinerary: selecting this fuel stop opens its map marker. Fuel is scheduled just before 1,000 cumulative miles, including miles driven before pickup. Each pickup and dropoff takes one hour. After 11 driving hours, the schedule inserts a ten-hour rest.”
+> I’ll generate the plan now. The route is about fourteen hundred and thirty-eight miles. Driving takes twenty-six hours and nine minutes, while the complete trip takes forty-eight hours and thirty-nine minutes. That difference includes pickup, delivery, fuel and rest. Delivery finishes on September seventeenth at approximately six thirty-eight in the morning.
 
-Click the fuel row, then use **Fit route** so the reviewer can see its popup. Briefly open Directions if time allows. Do not read turn-by-turn instructions or every timestamp.
+### 1:15–1:55: Map and stops
 
-### 1:55–2:55: daily logs and printing
+**Show:** Show the two route legs. Click the fuel event to open its marker, then briefly point to the daily rest events. Use Fit route when needed.
 
-Open **Daily logs (3)** and move through the three dates.
+> The map separates the leg to pickup from the leg to delivery. Selecting a stop in the itinerary opens its map marker. This fuel stop occurs just before one thousand cumulative miles, including the miles before pickup. Pickup and dropoff each take one hour. The driver reaches eleven driving hours before each of these ten-hour rests.
 
-“The same schedule fills one record for each terminal calendar date. The graph shows off duty, sleeper berth, driving and on-duty work. These totals add to exactly 24 hours. Remarks identify each activity and its location.
+### 1:55–2:40: Daily logs
 
-“Rest can cross midnight, so the daily record splits it across sheets. Midnight itself does not reset the driving allowance. The unused time before and after the trip is labelled as assumed off duty.”
+**Show:** Open Daily logs (3), point to the graph and totals, and move through all three dates.
 
-Open **Print logs**, show the three-page preview briefly, then cancel.
+> The same schedule fills one log for each terminal calendar date. The graph shows off duty, sleeper berth, driving and on-duty work, with totals that add to exactly twenty-four hours. Remarks identify the activities and locations. Rest can cross midnight, so it appears across two sheets. Midnight itself does not reset the driving allowance. Time before departure and after completion is clearly labelled as assumed off duty.
 
-“Printing includes every daily sheet, even when a different date is selected.”
+### 2:40–2:55: Print
 
-### 2:55–3:25: cycle limit
+**Show:** Click Print logs, briefly show that the preview contains three pages, then cancel.
 
-Choose **Cycle restart**, keep the same departure, and generate.
+> Printing includes every daily sheet, even when only one date is selected on screen.
 
-“This preset starts with 68 of the 70 cycle hours already used. The driver can drive for two hours, from six to eight, then the planner inserts a 34-hour restart. The restart ends at six in the evening the following day.
+### 2:55–3:25: Cycle limit
 
-“The input provides a total for prior cycle usage, not eight daily records. Without that history, the planner uses a conservative restart instead of inventing available recap hours.”
+**Show:** Select Cycle restart, confirm the same departure, and generate. Point to the first two events.
 
-Expected secondary result: Chicago → Nashville → Atlanta, about 715 miles, 13h 30m driving, 59h 30m elapsed, one cycle restart, one later daily rest and three logs.
+> This second example starts with sixty-eight of seventy cycle hours already used. The driver can drive for two hours, then the planner inserts a thirty-four-hour restart. The input gives total cycle usage, without the previous eight daily records. Without that history, the planner uses a conservative restart instead of inventing available recap hours.
 
-### 3:25–4:20: code
+### 3:25–4:20: Code
 
-Open these files in advance:
+**Show:** Show the plan view in views.py, then the scheduling loop and daily_logs in schedule.py. Have each location open in advance.
 
-1. `backend/planner/views.py`: the `plan` view.
-2. `backend/planner/schedule.py`: the `while elapsed < leg.seconds` loop and `seconds = min(...)`.
-3. `backend/planner/schedule.py`: `daily_logs`.
-4. Optionally `frontend/src/LogSheet.tsx`: graph coordinates and polyline.
+> Django validates the request, gets the road route, calculates the schedule and returns the result to React. Scheduling is separate from network calls, which makes it straightforward to test with known routes. For each driving segment, the scheduler takes the smallest remaining allowance: route time, daily driving, the eight-hour break threshold, the fourteen-hour shift window, cycle hours or distance until fuel. It adds an event, updates the clocks and checks again, using integer seconds. The itinerary and daily logs share that event list. The daily-log function splits events across calendar dates, and React draws the resulting segments.
 
-“Django validates the request, gets the ordered road legs, calculates the schedule and returns the results to React. The scheduling function is separate from network calls, so it can be tested with known routes.
+### 4:20–4:45: Verification and close
 
-“For each driving segment, it takes the smallest remaining allowance: route time, daily driving, the break threshold, the cycle, the shift window or distance until fuel. It adds that event, updates the clocks and checks again. All clocks use integer seconds.
+**Show:** Show the successful Verify run. Finish on the application if time allows.
 
-“The itinerary and daily logs come from the same event list. The daily-log function intersects events with calendar dates, and React draws the resulting segments.”
-
-Do not read the entire function or explain imports, every component, CSS classes or framework boilerplate.
-
-### 4:20–4:45: verification and scope
-
-Show the latest successful **Verify** run.
-
-“The suite passes 177 tests, including browser checks at four screen sizes. The scheduling tests also exercise 1,620 generated trips, with independent checks of the clocks and daily totals. I ran the live demonstration separately against the deployed application.
-
-“The main remaining production integrations would be truck-specific routing, verified parking and fuel facilities, and actual driver recap history. The app and source links are included with my submission.”
-
-Use the [passing main-branch run](https://github.com/Hanzala-Shadow/spotter-trip-planner/actions/runs/34849085988) as the test evidence. Open the latest `main` revision for the code walkthrough.
+> The suite passes one hundred and seventy-seven tests, including browser checks at four screen sizes and sixteen hundred and twenty generated scheduling cases. The live deployment was also checked separately. For production, I would add truck-specific routing, verified stopping facilities and actual driver recap history. The source, hosted app and this walkthrough are included with my submission. Thank you.
 
 ## What deserves detail, and what to skim
 
@@ -165,15 +166,6 @@ Use the [passing main-branch run](https://github.com/Hanzala-Shadow/spotter-trip
 | Missing recap history and the restart policy | Long discussion of future features |
 
 If running late, skip optional code files, directions and detailed provider internals. Keep the main example, logs, cycle edge case and core scheduling explanation.
-
-## Before recording
-
-1. Open the public app, the three code locations and the latest successful CI run. Use readable browser/editor zoom and close unrelated tabs or notifications.
-2. Generate Multi-day and Cycle restart once to confirm the live providers are responding. Recheck the departure date and terminal offset.
-3. Return to Multi-day and fill the optional demo details before recording. Recording the actual generation is preferable to presenting a screenshot.
-4. Test **Print logs** once. Use Letter, portrait and default scaling; know how to cancel the dialog quickly.
-5. Aim for roughly 4:30–4:45, leaving room for a brief network wait. Do not run the full test suite during the recording; show the completed result.
-6. Play back the video once to check audio, readable code and a duration within 3–5 minutes. Check the video link's reviewer access.
 
 ## Submission text
 

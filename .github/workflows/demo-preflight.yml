@@ -24,32 +24,3 @@ jobs:
           name: demo-preflight
           path: test-results/demo-preflight/
           retention-days: 7
-  prepare-style:
-    if: github.ref == 'refs/heads/submission-prep'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: npm
-      - run: python -m pip install ruff==0.12.12
-      - run: npm ci
-      - run: ruff check --fix backend api scripts
-      - run: ruff format backend api scripts
-      - run: npx prettier --write frontend/src frontend/tsconfig.json e2e scripts/demo_preflight.mjs package.json
-      - name: Export formatting changes for review
-        run: |
-          python - <<'PY'
-          import json
-          import subprocess
-          from pathlib import Path
-          changed = subprocess.check_output(['git', 'diff', '--name-only']).decode().splitlines()
-          for name in changed:
-              path = Path(name)
-              if path.suffix in ('.py', '.tsx', '.ts', '.css', '.json', '.mjs'):
-                  print('FORMATTED_SOURCE ' + json.dumps({'path': name, 'content': path.read_text()}))
-          PY

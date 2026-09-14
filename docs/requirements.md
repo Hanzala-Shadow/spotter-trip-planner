@@ -1,6 +1,6 @@
 # Assessment requirements and verification
 
-Source: Spotter AI Full Stack Developer assessment, received 13 September 2026 UTC. Original files are preserved in `spotter-trip-planner-review.zip`; `docs/references/README.md` lists them. The recruiter email and personal submission URL are deliberately excluded from the repository.
+Source: Spotter AI Full Stack Developer assessment, received 13 September 2026 UTC. The supplied document, log-sheet image and FMCSA guide define the requirements. Personal correspondence and the candidate's submission URL are excluded from this repository.
 
 ## Required behavior
 
@@ -16,10 +16,10 @@ Source: Spotter AI Full Stack Developer assessment, received 13 September 2026 U
 | R08 | Property driver, 70 hours / 8 days, no adverse conditions | Documented scheduling policy              | Rule boundary tests                      |
 | R09 | Fuel at least every 1,000 miles                           | Cumulative distance across both legs      | Fuel-gap boundary tests                  |
 | R10 | One hour for pickup and dropoff                           | 60 minutes at each location               | Exactly two service events               |
-| R11 | Good UI, UX and aesthetics                                | Responsive dispatch workspace             | Desktop/mobile browser review            |
+| R11 | Good UI, UX and aesthetics                                | Responsive dispatch workspace             | Four viewport sizes and live preflight            |
 | R12 | Hosted version and GitHub code                            | Vercel configuration and Git repository   | Public deployment and source checks      |
 | R13 | 3–5 minute Loom showing app and code                      | Walkthrough outline                       | User records final video                 |
-| R14 | At most four days and 16 work hours                       | Bounded phases                            | Development log                          |
+| R14 | At most four days and 16 work hours                       | Candidate tracks time spent               | Candidate declaration                    |
 
 ## Reference guide
 

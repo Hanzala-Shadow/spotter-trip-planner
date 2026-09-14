@@ -14,7 +14,7 @@ flowchart TD
     LOGS --> UI
 ```
 
-The browser never calculates legal driving availability. Django produces a single authoritative event sequence. The map, itinerary, summary and graphs all read that sequence, which prevents independent views from disagreeing.
+The browser never calculates legal driving availability. Django produces a single event sequence. The map, itinerary, summary and graphs all read that sequence, which prevents independent views from disagreeing.
 
 ## Scheduling model
 
@@ -44,7 +44,7 @@ Events carry ISO start/end timestamps in the selected fixed home-terminal offset
 
 Every sheet's status durations sum to exactly 86,400 seconds. Crossing midnight alone never resets a driving clock. The SVG maps seconds horizontally and the four duty statuses vertically, connecting adjacent transitions. Totals include seconds when necessary instead of rounding four independent values into a misleading 24-hour total. Summary cards use rounded minutes for readability.
 
-The log includes date, driver, carrier, vehicle, trip endpoints, mileage, shipping reference, terminal and remarks. Missing optional metadata is labelled “Not provided.” The signature remains blank. Print CSS includes every sheet and starts each daily record on a new page. Very dense remark tables may continue onto another physical page; final browser print inspection remains a release gate.
+The log includes date, driver, carrier, vehicle, trip endpoints, mileage, shipping reference, terminal and remarks. Missing optional metadata is labelled “Not provided.” The signature remains blank. Print CSS includes every sheet and starts each daily record on a new page. Very dense remark tables may continue onto another physical page. Verified print cases include four-day restarts, midnight service and maximum-length metadata.
 
 ## Provider isolation
 
@@ -52,7 +52,7 @@ The log includes date, driver, carrier, vehicle, trip endpoints, mileage, shippi
 - OSRM is called once for the ordered three-waypoint trip. Full step geometries produce separate road legs and instructions.
 - A bounded in-process cache holds at most 128 provider responses for 15 minutes. It is opportunistic across warm requests, not persistent serverless storage.
 - Optional reverse lookups resolve at most eight unique roadside points per trip, with two concurrent requests and a three-second per-request timeout. A missing city/state label retains the exact planning coordinates. Enrichment never changes timing or location.
-- Route and search errors return visible 503 errors. No straight-line or fabricated trip is substituted for a failed route.
+- Route and search errors return visible 503 errors. A failed route returns an error rather than an estimated replacement.
 - Public providers are suitable for a limited assessment demo. Sustained traffic needs contracted or self-hosted providers, shared caching and deployment rate limits.
 
 ## API contract

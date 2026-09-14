@@ -1,88 +1,54 @@
-# Verification record
+# Verification
 
-Latest results: [rigorous assessment audit](assessment-audit.md), including 177 passing tests, four browser viewports, printed edge cases and repaired input/provider failures. The sections below preserve the earlier phase and recovery history.
+## Automated suite
 
-## Original phase record (before GitHub publication)
+The latest full assessment audit passed **177 named tests**: 123 Python tests, 18 React component tests and 36 browser cases. Two backend tests additionally exercise 1,620 generated schedules inside that count.
 
-| Phase                      | Delivered                                                                                       | Evidence                                                                      | Remaining gate                                      |
-| -------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------- |
-| 1 · Foundation             | Local Git repository, Django, React/MUI/Vite, references and requirement map                    | Django health endpoint, frontend build and same-origin HTTP proxy verified    | Remote GitHub repository creation                   |
-| 2 · Engine/API             | Road provider, deterministic duty scheduling, logs, validation and errors                       | 48 original backend tests passed, including 120 generated scenarios           | None for the implemented offline core               |
-| 3 · Workflow               | Trip form, Leaflet map, itinerary, directions, SVG logs, print layout and optional stop names   | 51 backend tests and 15 frontend tests passed; production bundle built        | Phone-sized viewport and exported PDF QA            |
-| 4 · Deployment preparation | Vercel function adapters, runtime/build configuration, CI, live smoke check and technical notes | 56 backend tests plus 15 frontend tests passed; all three WSGI exports tested | Phone-sized viewport, exported PDF and GitHub gates |
+[Verified audit run](https://github.com/Hanzala-Shadow/spotter-trip-planner/actions/runs/34835111999)
 
-**71 automated test cases pass.** The 120 generated scheduler scenarios run inside one of those backend test cases; they are not an additional 120 named tests.
+| Area | Coverage |
+| --- | --- |
+| Scheduling | 11-hour driving limit, 14-hour window, eight-hour break threshold, qualifying daily rest and 70-hour cycle |
+| Fuel and service | Cumulative gaps no greater than 1,000 miles; exactly one hour each for pickup and dropoff |
+| Boundary cases | Zero-distance legs, fractional cycle usage, exact clock limits, midnight, leap-day, year-end and repeated restarts |
+| Daily records | Continuous segments, exact 24-hour totals, conserved mileage and every trip date represented |
+| API | Invalid types, huge integers, malformed dates/JSON, request limits, method/media errors and all Vercel WSGI adapters |
+| Providers | Search filtering, malformed envelopes and geometry, routing failures, optional label fallback and bounded requests |
+| Interface | Required selection, retry after service errors, stale-result notice and print protection, keyboard search, dialog focus and log navigation |
 
-## What the automated checks cover
+The independent scheduler audit recomputes clocks from status intervals rather than trusting reset labels or counters. It checks each driving interval, intersects events with calendar dates, and independently verifies distance and service durations.
 
-- Driving ≤11 hours after qualifying rest; no driving outside the 14-hour window.
-- A non-driving interruption after eight cumulative driving hours.
-- Current cycle usage, near-exhausted cycle, 34-hour restart and no redundant daily rest before restart.
-- Fuel gaps ≤1,000 miles across the pickup boundary, fractional hours and exact-mileage conservation.
-- One hour each of pickup/dropoff, zero-distance legs, continuous events, midnight crossings and 24-hour sheet totals.
-- Input validation, provider failures, geocoder filtering, geometry validation and speed estimate cap.
-- Approximate city/state enrichment and coordinate fallback without changing the schedule.
-- Actual Vercel WSGI adapter dispatch for health, location search, JSON plan POST and errors.
-- Form-to-Django request contract, selected coordinates, stale search response rejection, missing selection, invalid hours, error recovery, directions, modal interaction, daily log navigation and inclusion of all print sheets.
+## Browser and print coverage
 
-The frontend fixture is generated through the Django view with declared route fixtures. Leaflet rendering is isolated from component tests; the hosted browser check below verified actual map tiles, geometry and popups.
+Chromium cases run at 1440 × 1000, 390 × 844, 320 × 740 and 768 × 1024. They use the built React app and real Django application with declared provider fixtures.
 
-## Live HTTP checks
+The earlier print review covered 16 PDFs and 40 total US Letter pages. All ten distinct page designs were rendered and inspected: a four-day year-end cycle restart, zero-distance service across leap-day midnight, a normal multi-day route and maximum-length optional details. Each scenario produced identical page-render hashes across all four viewports. No missing dates, blank leading pages or clipped text were found. Narrow graphs scroll within the worksheet without widening the page.
 
-The production frontend and actual Django application were run on one local HTTP origin using `scripts/serve_preview.py`. `scripts/live_smoke.py` served the built homepage, called the health endpoint and posted three requests using real public OSRM/Photon providers.
+## Live recording preflight
 
-Fixed departure: 15 September 2026, 06:00 at UTC−06:00. Distances and route estimates may change with provider data.
+[Successful recording preflight](https://github.com/Hanzala-Shadow/spotter-trip-planner/actions/runs/34847944239), 14 September 2026, 13:14 UTC.
 
-| Request                                    | Road miles | Driving  | Daily sheets | Fuel | Daily rests | Cycle restarts |
-| ------------------------------------------ | ---------: | -------- | -----------: | ---: | ----------: | -------------: |
-| Chicago → Springfield → Nashville, cycle 0 |      561.3 | 10:51:08 |            1 |    0 |           0 |              0 |
-| Same route, cycle 68                       |      561.3 | 10:51:08 |            3 |    0 |           0 |              1 |
-| Los Angeles → Phoenix → Dallas, cycle 20   |    1,438.1 | 26:08:53 |            3 |    1 |           2 |              0 |
+This check used the public Vercel application with real Photon/OSRM/OpenStreetMap services. It verified health, route generation, loaded map tiles, route paths, the fuel popup, directions, all log dates, printing, a 390-pixel layout, stale-print protection and absence of uncaught page errors.
 
-All three passed. Each response had two route legs, conserved daily totals and the expected stop types. Response sizes were approximately 210–359 KB. Some optional reverse lookups returned city/state; others retained coordinate labels as designed.
+Fixed departure: 15 September 2026 at 06:00, terminal UTC−06:00.
 
-These checks prove HTTP/API integration with live routing. They do not prove map tiles render, browser layout is correct, or Vercel's deployed packaging works.
+| Preset | Cycle used | Miles | Driving | Total elapsed | Logs | Fuel / daily rest / cycle restart |
+| --- | ---: | ---: | --- | --- | ---: | --- |
+| Multi-day | 20 h | 1,438.1 | 26:08:53 | 48:38:53 | 3 | 1 / 2 / 0 |
+| Cycle restart | 68 h | 714.8 | 13:30:29 | 59:30:29 | 3 | 0 / 1 / 1 |
 
-## Hosted verification · 14 September 2026
+Measured generation times were 5.556 and 3.239 seconds for this run; these are observations, not latency guarantees. Public routing estimates and optional nearby labels can change. The script records the current values in its JSON report.
 
-Public URL: [https://spotter-trip-planner-indol.vercel.app/](https://spotter-trip-planner-indol.vercel.app/)
+Run `npm run demo:preflight` or the **Demo preflight** workflow before recording. Its report, route screenshot, mobile screenshot and three-day PDF are attached to the run for seven days.
 
-- Deployment `dpl_6r1VYFq9yi9mqmci5qv7io89GyDm` is READY. Build completed in 26 seconds; three Python 3.12 functions were bundled.
-- The public homepage and `/api/health` returned HTTP 200 without authentication. The team preview address is protected; use the public URL above for the assessment.
-- Real browser generation passed for all three UI presets: Chicago → Springfield → Nashville; Los Angeles → Phoenix → Dallas; and Chicago → Nashville → Atlanta with cycle 68.
-- The desktop screenshot shows loaded OpenStreetMap tiles, both road legs, route markers and the itinerary. Clicking Pickup opened the corresponding map popup. Directions rendered actual road instructions.
-- The long-trip preset showed 1,438 miles, one fuel stop, two daily rests and three log dates. Navigation reached the final date and disabled Next. All three print sheets were present in the DOM. Four-status graph rendering and on-screen remarks were visually inspected.
-- Cycle 68 produced two hours driving followed by a 34-hour restart; the remaining schedule included its required daily rest.
-- Hours 71 displayed a validation error. Edited inputs displayed the stale-result notice. Live Denver search returned city/state candidates, and selection updated the field.
-- No application errors appeared in the browser log filtered to the app's domain; Vercel's runtime error scan also returned no errors. Extension/sign-in-page messages were not counted as application failures.
-- Upload contained only 30 application/build files (about 231 KB of text); no supplied reference files were sent.
+## Repairs covered by regression tests
 
-## Remaining delivery steps
+The audit found and corrected integer-overflow validation, permissive date parsing, malformed provider data, unreadable gateway error messages, stale-plan printing and a print-page background issue. The input audit first reproduced 29 failing parameterized cases; those cases now pass. No driving-rule violation was found by the independent schedule audit.
 
-- The existing Vercel project is now connected to the private GitHub repository, confirmed after recovery on 14 September 2026. Deployment history and source commit metadata identify which push is live.
-- The repository remains private. Reviewer access must be arranged before sharing the source link as a final submission.
-- The author still needs to review the architecture and record the required 3–5 minute Loom. Assessment submission has not been sent.
-- The expanded audit uses Chromium at four emulated sizes (320, 390, 768 and 1440 pixels), not physical devices. PDF review now includes multi-day, year-end restart, leap-day midnight and long metadata cases.
+The submission cleanup removes decorative heading/status icons, repeated preparation text, an obsolete reference manifest, a duplicate dependency manifest and the superseded HTTP-only smoke script. Python source uses consistent Ruff formatting. CI checks unused Python imports/variables and TypeScript locals/parameters.
 
-## Recovery verification — 14 September 2026
+## Limits
 
-- Recovered source from the saved review package and compared it with GitHub: the remote initially contained only `.gitignore`.
-- Reran the locked dependency installation, 56 backend tests, 15 frontend tests, TypeScript/Vite production build, Django system check and generated-fixture consistency check. All passed.
-- Vercel deployment `dpl_6r1VYFq9yi9mqmci5qv7io89GyDm` remains READY. The Django health endpoint returned HTTP 200. At that recovery check the Vercel project had no Git link; the user connected it afterward.
-- Repeated the live Los Angeles → Phoenix → Dallas trip: 1,438 miles, one fuel stop, two daily rests and three log sheets. The itinerary fuel button opened the matching Leaflet popup.
-- Source uploads exclude the original PDF, PNG and DOCX reference attachments; those bytes are retained in the review package. All runtime source, tests, dependency locks, configuration and technical documentation are included.
+The implementation uses the [FMCSA property-carrier rules](https://www.fmcsa.dot.gov/regulations/hours-service/summary-hours-service-regulations) within its documented planning assumptions. It has no prior daily recap history, truck-specific restrictions, facility availability or automatic terminal daylight-saving transitions. Browser coverage uses Chromium and emulated viewports, not physical-device certification.
 
-## GitHub Actions and visual verification
-
-[Successful run 34831240229](https://github.com/Hanzala-Shadow/spotter-trip-planner/actions/runs/34831240229) tested source commit `77288c78d8b0f6de3f698a5728a50bfe25f19302`.
-
-- **77 named tests passed:** 56 backend, 15 frontend and six browser cases. The 120 generated scheduler scenarios remain part of the backend suite, not 120 extra named tests.
-- TypeScript checking, Vite build, Django system check and regenerated-fixture consistency passed in CI.
-- Browser cases passed at 1440 × 1000 desktop and 390 × 844 mobile: trip generation, Leaflet stop popup, log-day navigation, print-sheet inclusion, selected-location submission, input validation, API-error recovery and stale-result notice. The overflow assertion passed on both viewports.
-- Inspected both browser screenshots. The narrow layout stacks the form and results; the daily worksheet stays within the page. CI deliberately blocks public map tiles and uses declared road fixtures, so its map-unavailable notice is expected. The live production check separately exercised real routing and the fuel popup.
-- Downloaded the `browser-verification` artifact and checked its SHA-256 against GitHub's recorded digest. Both PDFs have exactly two US Letter pages. Rendered every page and inspected the graphs, totals, remarks and footer: no missing sheets, blank leading page or clipped content. Desktop and mobile PDF page renders have identical hashes.
-- Rebuilt frontend files match every asset in the archived deployed build byte for byte. The live homepage references the same application JS and CSS asset names.
-- A Vercel runtime error query covering the last hour returned no errors.
-- All 62 remote source files matched the local blob hashes after nine sequential upload batches. The original remote initialization commit was retained. The original five phase commits are preserved separately in the review bundle and local `recovered-phase-history` branch.
-
-The later verification-record commit changes documentation only; it does not change the application or test code validated by this run.
+The candidate must review the implementation, arrange access to the private repository, record the 3–5 minute Loom and submit the required links. Work time is declared by the candidate, not inferred from automated tests.

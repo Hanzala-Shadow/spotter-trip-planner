@@ -40,22 +40,43 @@ def get_json(url, params, timeout=15):
 def search_places(query):
     base = os.environ.get("PHOTON_BASE_URL", "https://photon.komoot.io").rstrip("/")
     data = get_json(base+"/api/", {"q": query, "limit": 6, "lang": "en", "bbox": "-125,24,-66,50"})
+    if not isinstance(data.get("features"), list):
+        raise ProviderError("The location service returned an invalid response. Please try again.")
     places = []
-    for feature in data.get("features", []):
-        props = feature.get("properties", {})
-        if props.get("countrycode", "").upper() != "US":
+    for feature in data["features"]:
+        if not isinstance(feature, dict):
             continue
-        coords = feature.get("geometry", {}).get("coordinates", [])
-        if len(coords) != 2:
+        props = feature.get("properties", {})
+        if not isinstance(props, dict) or str(props.get("countrycode", "")).upper() != "US":
+            continue
+        geometry = feature.get("geometry")
+        coords = geometry.get("coordinates") if isinstance(geometry, dict) else None
+        if not valid_point(coords, us_only=True):
             continue
         parts = []
         for key in ("name", "city", "state"):
             value = props.get(key)
-            if value and value not in parts:
-                parts.append(value)
+            if isinstance(value, str) and value.strip() and value.strip() not in parts:
+                parts.append(value.strip())
         if parts:
-            places.append(Place(", ".join(parts), coords[0], coords[1]).json())
+            label = ", ".join(parts)
+            if len(label) <= 200:
+                place = Place(label, coords[0], coords[1]).json()
+                if place not in places:
+                    places.append(place)
+        if len(places) == 6:
+            break
     return places
+
+
+def valid_point(point, us_only=False):
+    """Check provider coordinates before they reach geometry or browser code."""
+    bounds = ((-125, -66), (24, 50)) if us_only else ((-180, 180), (-90, 90))
+    return isinstance(point, (list, tuple)) and len(point) == 2 and all(
+        not isinstance(value, bool) and isinstance(value, (int, float))
+        and low <= value <= high and isfinite(value)
+        for value, (low, high) in zip(point, bounds)
+    )
 
 
 def fetch_route(places):
@@ -65,11 +86,13 @@ def fetch_route(places):
                     {"overview": "full", "geometries": "geojson", "steps": "true", "radiuses": "10000;10000;10000"})
     if data.get("code") != "Ok" or not data.get("routes"):
         raise ProviderError("No drivable route was found through all three locations. Try nearby road addresses.")
-    route = data["routes"][0]
-    if len(route.get("legs", [])) != 2:
-        raise ProviderError("The routing service returned an incomplete trip. Please try again.")
     legs = []
     try:
+        if not isinstance(data["routes"], list):
+            raise ValueError("Invalid routes")
+        route = data["routes"][0]
+        if not isinstance(route, dict) or not isinstance(route.get("legs"), list) or len(route["legs"]) != 2:
+            raise ValueError("Incomplete trip")
         for i, raw in enumerate(route["legs"]):
             miles = float(raw["distance"])/1609.344
             duration = float(raw["duration"])
@@ -79,22 +102,29 @@ def fetch_route(places):
             geometry, directions = [], []
             for step in raw.get("steps", []):
                 for point in step.get("geometry", {}).get("coordinates", []):
+                    if not valid_point(point):
+                        raise ValueError("Invalid road coordinates")
                     if not geometry or point != geometry[-1]:
                         geometry.append(point)
                 maneuver = step.get("maneuver", {})
                 action = maneuver.get("type", "continue").replace("_", " ")
                 modifier = maneuver.get("modifier", "")
                 road = step.get("name") or step.get("ref") or "the road"
+                if not isinstance(modifier, str) or not isinstance(road, str):
+                    raise ValueError("Invalid road instruction")
                 instruction = f"{action.capitalize()} {modifier} onto {road}".replace("  ", " ")
                 if action == "depart": instruction = f"Depart on {road}"
                 if action == "arrive": instruction = f"Arrive at {places[i+1].label}"
-                directions.append({"instruction": instruction, "miles": float(step.get("distance", 0))/1609.344})
+                step_miles = float(step.get("distance", 0))/1609.344
+                if not isfinite(step_miles) or step_miles < 0:
+                    raise ValueError("Invalid instruction distance")
+                directions.append({"instruction": instruction, "miles": step_miles})
             if len(geometry) < 2:
                 if miles > .01:
                     raise ValueError("Missing road geometry")
                 geometry = [[places[i].lon, places[i].lat], [places[i+1].lon, places[i+1].lat]]
             legs.append(Leg(places[i], places[i+1], miles, seconds, geometry, directions))
-    except (KeyError, TypeError, ValueError) as exc:
+    except (KeyError, TypeError, ValueError, AttributeError, IndexError, OverflowError) as exc:
         raise ProviderError("The routing service returned an invalid route. Please try again.") from exc
     if sum(leg.miles for leg in legs) > 20000 or sum(leg.seconds for leg in legs) > 30*86400:
         raise ProviderError("This route exceeds the planner's size limit. Split it into smaller trips.")

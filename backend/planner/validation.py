@@ -1,10 +1,11 @@
 from datetime import datetime, timedelta, timezone
 from math import isfinite
+import re
 from .schedule import Place
 
 
 def number(value, minimum, maximum, label):
-    if isinstance(value, bool) or not isinstance(value, (int, float)) or not isfinite(value) or not minimum <= value <= maximum:
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not minimum <= value <= maximum or not isfinite(value):
         raise ValueError(f"{label} must be a number between {minimum} and {maximum}.")
     return value
 
@@ -26,7 +27,7 @@ def validate_trip(data):
         raise ValueError("Home terminal UTC offset must be whole minutes.")
     try:
         raw_departure = data.get("departure", "")
-        if not isinstance(raw_departure, str): raise ValueError()
+        if not isinstance(raw_departure, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,6})?)?", raw_departure): raise ValueError()
         departure = datetime.fromisoformat(raw_departure)
         if departure.tzinfo is not None: raise ValueError()
         if not 2020 <= departure.year <= 2100: raise ValueError()

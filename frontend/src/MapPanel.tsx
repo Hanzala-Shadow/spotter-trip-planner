@@ -141,7 +141,7 @@ export default function MapPanel({
       ) : (
         <div className="map-empty">
           <span className="eyebrow">YOUR NEXT TRIP</span>
-          <h2>Every stop, accounted for.</h2>
+          <h2>Route preview</h2>
           <p>Choose your locations to see the route, rest stops and daily logs.</p>
           <div className="map-empty-key">
             <span>01 Start</span>

@@ -50,3 +50,24 @@ it('discards an old search response when the text has changed', async () => {
   await waitFor(() => expect(screen.getByLabelText('Current location')).toHaveValue('Dallas'));
   expect(screen.queryByRole('list')).not.toBeInTheDocument();
 });
+it('shows a useful message when search returns HTML instead of JSON', async () => {
+  vi.stubGlobal(
+    'fetch',
+    vi.fn().mockResolvedValue({
+      ok: false,
+      json: async () => {
+        throw new SyntaxError('Unexpected token <');
+      },
+    }),
+  );
+  render(
+    <LocationField label="Current location" value={null} onChange={() => {}} disabled={false} />,
+  );
+  fireEvent.change(screen.getByLabelText('Current location'), { target: { value: 'Chicago' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Search current location' }));
+  expect(
+    await screen.findByText(
+      'The location service returned an unreadable response. Please try again.',
+    ),
+  ).toBeInTheDocument();
+});

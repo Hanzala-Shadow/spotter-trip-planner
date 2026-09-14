@@ -48,7 +48,9 @@ export default function LocationField({
       const response = await fetch(`/api/locations?q=${encodeURIComponent(query.trim())}`, {
         signal: AbortSignal.timeout(20000),
       });
-      const data = await response.json();
+      const data = await response.json().catch(() => {
+        throw new Error('The location service returned an unreadable response. Please try again.');
+      });
       if (!response.ok) throw new Error(data.error || 'Location search failed.');
       if (id !== requestId.current) return;
       setResults(data.places);

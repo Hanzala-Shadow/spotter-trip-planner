@@ -1143,6 +1143,7 @@ button {
     size: letter portrait;
     margin: 12mm;
   }
+  html,
   body {
     background: white !important;
     -webkit-print-color-adjust: exact;
@@ -1154,6 +1155,12 @@ button {
   }
   .print-logs {
     display: block;
+  }
+  .print-stale-notice {
+    padding: 10px;
+    border: 2px solid #9a5320;
+    color: #713a14;
+    font-weight: 700;
   }
   .log-sheet {
     border: 0;

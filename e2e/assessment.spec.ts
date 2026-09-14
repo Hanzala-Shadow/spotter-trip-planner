@@ -105,9 +105,11 @@ test('gateway errors recover and changed inputs cannot silently print old detail
     { times: 1 },
   );
   await page.getByRole('button', { name: 'Generate trip plan' }).click();
-  await expect(page.getByRole('alert')).toContainText(
-    'The trip service returned an unreadable response. Please try again.',
-  );
+  await expect(
+    page.getByRole('alert').filter({
+      hasText: 'The trip service returned an unreadable response. Please try again.',
+    }),
+  ).toBeVisible();
   await page.getByRole('button', { name: 'Generate trip plan' }).click();
   await expect(page.getByRole('heading', { name: 'Chicago to Nashville' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Print logs' })).toBeEnabled();

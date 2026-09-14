@@ -397,9 +397,7 @@ export default function App() {
             )}
             <div className="stats-grid">
               <div>
-                <span>
-                  Total distance
-                </span>
+                <span>Total distance</span>
                 <strong>
                   {plan ? Math.round(plan.summary.miles).toLocaleString() : '—'}
                   <small>{plan ? ' mi' : ''}</small>
@@ -407,16 +405,12 @@ export default function App() {
                 <p>Current → pickup → dropoff</p>
               </div>
               <div>
-                <span>
-                  Driving time
-                </span>
+                <span>Driving time</span>
                 <strong>{plan ? duration(plan.summary.driving_seconds) : '—'}</strong>
                 <p>Road travel only</p>
               </div>
               <div>
-                <span>
-                  Trip duration
-                </span>
+                <span>Trip duration</span>
                 <strong>{plan ? duration(plan.summary.elapsed_seconds) : '—'}</strong>
                 <p>
                   {plan
@@ -425,9 +419,7 @@ export default function App() {
                 </p>
               </div>
               <div>
-                <span>
-                  Delivery completed
-                </span>
+                <span>Delivery completed</span>
                 <strong>{plan ? time(plan.summary.arrival) : '—'}</strong>
                 <p>
                   {plan
@@ -448,15 +440,9 @@ export default function App() {
             {plan ? (
               <>
                 <div className="trip-summary">
-                  <span>
-                    {plan.summary.fuel_stops} fuel stops
-                  </span>
-                  <span>
-                    {plan.summary.daily_rests} daily rests
-                  </span>
-                  <span>
-                    {plan.summary.cycle_restarts} cycle restarts
-                  </span>
+                  <span>{plan.summary.fuel_stops} fuel stops</span>
+                  <span>{plan.summary.daily_rests} daily rests</span>
+                  <span>{plan.summary.cycle_restarts} cycle restarts</span>
                   <span>
                     {(70 - plan.summary.cycle_used_at_finish).toFixed(1)} cycle hours left
                   </span>

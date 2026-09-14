@@ -55,16 +55,12 @@ Public URL: [https://spotter-trip-planner-indol.vercel.app/](https://spotter-tri
 - No application errors appeared in the browser log filtered to the app's domain; Vercel's runtime error scan also returned no errors. Extension/sign-in-page messages were not counted as application failures.
 - Upload contained only 30 application/build files (about 231 KB of text); no supplied reference files were sent.
 
-## Outstanding checks at recovery — 14 September 2026
+## Remaining delivery steps
 
-- The browser service still blocks local app URLs. Hosted desktop review succeeded through the public production URL.
-- Six supplied Playwright cases (three flows × desktop/mobile) were unexecuted in the original session. They are now wired into GitHub Actions; the final run result is recorded below.
-- A phone-sized viewport and exported PDF pagination remain unverified: the available browser interface does not expose viewport resizing or PDF export. The print button was exercised, but no exported PDF was inspected.
-- Source publication has now been recovered to the private GitHub repository. The nine batches preserve the existing remote initialization commit; the original five phase commits remain in the review bundle. Each published batch is checked against the remote branch and file hashes.
-- GitHub Actions now includes the six supplied desktop/mobile cases and uploads screenshots and PDFs. The run result is recorded below once observed.
-- Loom recording and assessment submission have not been performed.
-
-Commands and release steps are in `README.md` and `docs/deployment.md`.
+- The existing Vercel project has no Git repository link. Its direct production deployment is healthy; GitHub pushes do not automatically redeploy it.
+- The repository remains private. Reviewer access must be arranged before sharing the source link as a final submission.
+- The author still needs to review the architecture and record the required 3–5 minute Loom. Assessment submission has not been sent.
+- The mobile check used Chromium at 390 × 844, not a physical phone. PDF review covered the two-day route fixture used by the browser suite.
 
 ## Recovery verification — 14 September 2026
 
@@ -73,3 +69,18 @@ Commands and release steps are in `README.md` and `docs/deployment.md`.
 - Vercel deployment `dpl_6r1VYFq9yi9mqmci5qv7io89GyDm` remains READY. The Django health endpoint returned HTTP 200. The Vercel project has no Git link.
 - Repeated the live Los Angeles → Phoenix → Dallas trip: 1,438 miles, one fuel stop, two daily rests and three log sheets. The itinerary fuel button opened the matching Leaflet popup.
 - Source uploads exclude the original PDF, PNG and DOCX reference attachments; those bytes are retained in the review package. All runtime source, tests, dependency locks, configuration and technical documentation are included.
+
+## GitHub Actions and visual verification
+
+[Successful run 34831240229](https://github.com/Hanzala-Shadow/spotter-trip-planner/actions/runs/34831240229) tested source commit `77288c78d8b0f6de3f698a5728a50bfe25f19302`.
+
+- **77 named tests passed:** 56 backend, 15 frontend and six browser cases. The 120 generated scheduler scenarios remain part of the backend suite, not 120 extra named tests.
+- TypeScript checking, Vite build, Django system check and regenerated-fixture consistency passed in CI.
+- Browser cases passed at 1440 × 1000 desktop and 390 × 844 mobile: trip generation, Leaflet stop popup, log-day navigation, print-sheet inclusion, selected-location submission, input validation, API-error recovery and stale-result notice. The overflow assertion passed on both viewports.
+- Inspected both browser screenshots. The narrow layout stacks the form and results; the daily worksheet stays within the page. CI deliberately blocks public map tiles and uses declared road fixtures, so its map-unavailable notice is expected. The live production check separately exercised real routing and the fuel popup.
+- Downloaded the `browser-verification` artifact and checked its SHA-256 against GitHub's recorded digest. Both PDFs have exactly two US Letter pages. Rendered every page and inspected the graphs, totals, remarks and footer: no missing sheets, blank leading page or clipped content. Desktop and mobile PDF page renders have identical hashes.
+- Rebuilt frontend files match every asset in the archived deployed build byte for byte. The live homepage references the same application JS and CSS asset names.
+- A Vercel runtime error query covering the last hour returned no errors.
+- All 62 remote source files matched the local blob hashes after nine sequential upload batches. The original remote initialization commit was retained. The original five phase commits are preserved separately in the review bundle and local `recovered-phase-history` branch.
+
+The later verification-record commit changes documentation only; it does not change the application or test code validated by this run.

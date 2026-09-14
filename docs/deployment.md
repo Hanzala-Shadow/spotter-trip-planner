@@ -46,7 +46,7 @@ Vercel's [file-based Python documentation](https://vercel.com/docs/functions/run
 
 ## Release checklist
 
-Desktop and core hosted checks have passed. Source publication is complete. GitHub Actions now includes the desktop/mobile browser suite and uploads its screenshots and PDFs. Check the verification record for the latest run result; Loom recording and submission remain open.
+Desktop and core hosted checks have passed. Source publication is complete. GitHub Actions passed all 77 tests, including the desktop/mobile browser suite. Its screenshots and two-page PDFs were inspected. Connecting Vercel to GitHub, arranging reviewer access, Loom recording and submission remain open.
 
 1. Confirm the deployed homepage loads its JS/CSS and `/api/health` returns Django status.
 2. Generate the three supplied samples using live providers. Check route lines, markers, directions, cycle restart and fuel stop placement.

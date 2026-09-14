@@ -8,7 +8,7 @@ The implementation does not require an LLM, a database, a paid map key or a user
 
 **Source:** [Hanzala-Shadow/spotter-trip-planner](https://github.com/Hanzala-Shadow/spotter-trip-planner) (private).
 
-**Delivery status:** deployed on Vercel with the Django API and real routing verified. All 71 core tests and the production build passed again on 14 September 2026. Source is published in small, hash-verified commits. GitHub Actions runs the core checks and the six supplied desktop/mobile browser cases. See [verification](docs/verification.md) for measured results and remaining gates.
+**Delivery status:** deployed on Vercel with the Django API and real routing verified. All 77 tests passed in GitHub Actions on 14 September 2026 (56 backend, 15 frontend and six desktop/mobile browser cases), along with the production build. The 390px layout and exported two-page PDFs were inspected. Source is published in small, hash-verified commits. See [verification](docs/verification.md) for measured results and remaining gates.
 
 ## Run locally
 
